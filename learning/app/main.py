@@ -44,6 +44,8 @@ def login():
         session['username'] = request.form['username'] or 'undefined'
         app.logger.debug('user login: %s', session['username'])
         return redirect(url_for('index'))
+    if 'username' in session:
+        return redirect(url_for('index'))
     return '''
         <form method="post">
             <label for="username">Username:</label>
