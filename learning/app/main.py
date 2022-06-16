@@ -1,7 +1,16 @@
 # https://flask.palletsprojects.com/en/1.1.x/quickstart/
-
 from flask import Flask, url_for, abort, redirect, request, session
 from markupsafe import escape
+
+# https://pymongo.readthedocs.io/en/stable/api/pymongo/index.html
+from pymongo import MongoClient
+
+def get_database():
+    CONNECTION_STRING = "mongodb://anchor-mongo5-dev/"
+    client = MongoClient(CONNECTION_STRING)
+    # return client['anchor']
+    return client.anchor
+
 
 app = Flask(__name__)
 
@@ -55,6 +64,7 @@ def login():
         </form>
     '''
 
+
 @app.route('/logout')
 def logout():
     if 'username' in session:
@@ -62,3 +72,24 @@ def logout():
         #del session['username']
         session.pop('username', None)
     return redirect(url_for('index'))
+
+
+@app.route('/mongo')
+def mongo():
+    db = get_database()
+    #col = db['teste']
+    col = db.teste
+    # https://pymongo.readthedocs.io/en/stable/api/pymongo/results.html#pymongo.results.InsertOneResult
+    insert_result = col.insert_one({
+        # "_id": "U1IT00001",
+        "username": session["username"],
+        "item_name": "Blender",
+        "max_discount": "10%",
+        "batch_number": "RR450020FRG",
+        "price": 340,
+        "category": "kitchen appliance"
+    })
+    app.logger.debug('mongo inserted_id: %s', insert_result.inserted_id)
+    doc = col.find_one({'_id': insert_result.inserted_id})
+    doc['_id'] = str(doc['_id']) # TypeError: ObjectId ... is not JSON serializable
+    return doc
