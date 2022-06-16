@@ -2,5 +2,11 @@
 FROM python:2.7
 RUN pip install Flask
 WORKDIR /app
+ENV FLASK_ENV=development
 ENV FLASK_APP=main.py
-CMD ["flask", "run"]
+CMD ["flask", "run", "--host=0.0.0.0"]
+
+# flask --version
+#Python 2.7.18
+#Flask 1.1.4
+#Werkzeug 1.0.1
