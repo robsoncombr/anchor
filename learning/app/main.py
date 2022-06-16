@@ -1,6 +1,6 @@
 # https://flask.palletsprojects.com/en/1.1.x/quickstart/
 
-from flask import Flask, url_for
+from flask import Flask
 from markupsafe import escape
 
 app = Flask(__name__)
