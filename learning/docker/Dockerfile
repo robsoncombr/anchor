@@ -1,9 +1,9 @@
 # https://stackoverflow.com/questions/48561981/activate-python-virtualenv-in-dockerfile
 FROM python:2.7
 RUN pip install Flask pymongo
-WORKDIR /app
+WORKDIR /anchor
 ENV FLASK_ENV=development
-ENV FLASK_APP=main.py
+ENV FLASK_APP=./app/main.py
 
 CMD ["flask", "run", "--host=0.0.0.0"]
 
