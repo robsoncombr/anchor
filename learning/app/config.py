@@ -5,9 +5,13 @@ DEBUG = True
 import os
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))  
 
-# Define the database - we are working with mongo
-DATABASE_URI = 'mongodb://anchor-mongo5-dev/'
-DATABASE_NAME = 'anchor'
+# Define the SQLite database
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'app.db')
+SQLALCHEMY_DATABASE_CONNECT_OPTIONS = {}
+
+# Define the Mongo database
+MONGO_DATABASE_URI = 'mongodb://anchor-mongo5-dev/'
+MONGO_DATABASE_NAME = 'anchor'
 
 # Application threads. A common general assumption is
 # using 2 per available processor cores - to handle
