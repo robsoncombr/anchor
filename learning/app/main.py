@@ -1,9 +1,12 @@
 # https://flask.palletsprojects.com/en/1.1.x/quickstart/
+import random
+import string
 from flask import Flask, url_for, abort, redirect, request, session
 from markupsafe import escape
 
 # https://pymongo.readthedocs.io/en/stable/api/pymongo/index.html
 from pymongo import MongoClient
+
 
 def get_database():
     CONNECTION_STRING = "mongodb://anchor-mongo5-dev/"
@@ -74,6 +77,13 @@ def logout():
     return redirect(url_for('index'))
 
 
+def id_generator(size=6, chars='!#$' + string.ascii_uppercase + string.ascii_lowercase + string.digits):
+    return ''.join(random.SystemRandom().choice(chars) for _ in range(size))
+
+
+print(id_generator(32))
+
+
 @app.route('/mongo')
 def mongo():
     db = get_database()
@@ -91,5 +101,6 @@ def mongo():
     })
     app.logger.debug('mongo inserted_id: %s', insert_result.inserted_id)
     doc = col.find_one({'_id': insert_result.inserted_id})
-    doc['_id'] = str(doc['_id']) # TypeError: ObjectId ... is not JSON serializable
+    # TypeError: ObjectId ... is not JSON serializable
+    doc['_id'] = str(doc['_id'])
     return doc
